@@ -1,224 +1,494 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <title>Tarot Web App - Modern</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>Tarot Web App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
-    :root {
-      --primary-color: #6e45e2;
-      --secondary-color: #88d3ce;
-      --bg-dark: #1a1a2e;
-      --card-bg: #ffffff;
-      --text-main: #333;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    * { box-sizing: border-box; font-family: 'Sarabun', sans-serif; }
-
     body {
-      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
       padding: 20px;
       display: flex;
-      justify-content: center;
-      min-height: 100vh;
-      color: white;
+      flex-direction: column;
+      align-items: center;
     }
 
     .container {
       width: 100%;
       max-width: 500px;
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-      padding: 30px 20px;
+      background: rgba(255, 255, 255, 0.98);
       border-radius: 24px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+      padding: 28px 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: slideUp 0.4s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
     }
 
     h1 {
-      text-align: center;
       font-size: 32px;
-      margin-bottom: 30px;
-      background: linear-gradient(to right, #fff, #a18cd1);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+      font-weight: 700;
+      color: #2d3748;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
     }
 
-    .form-group { margin-bottom: 20px; }
+    .subtitle {
+      color: #718096;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
 
     label {
       display: block;
-      margin-bottom: 8px;
-      font-size: 18px;
-      color: #ccc;
+      font-size: 17px;
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 10px;
     }
 
     input, select {
       width: 100%;
-      padding: 16px;
-      font-size: 18px;
-      border-radius: 12px;
-      border: 2px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.9);
-      color: #000;
-      outline: none;
-      transition: 0.3s;
+      padding: 16px 18px;
+      font-size: 17px;
+      border-radius: 14px;
+      border: 2px solid #e2e8f0;
+      background: #ffffff;
+      color: #2d3748;
+      transition: all 0.3s ease;
+      -webkit-appearance: none;
+      appearance: none;
     }
 
-    input:focus { border-color: var(--primary-color); box-shadow: 0 0 10px rgba(110, 69, 226, 0.5); }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg width='14' height='8' viewBox='0 0 14 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L7 7L13 1' stroke='%232d3748' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 18px center;
+      padding-right: 48px;
+      cursor: pointer;
+    }
 
     button {
       width: 100%;
       padding: 18px;
-      font-size: 20px;
-      font-weight: bold;
+      margin-top: 8px;
+      font-size: 19px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
-      background: linear-gradient(45deg, #6e45e2, #88d3ce);
       border: none;
-      border-radius: 15px;
+      border-radius: 14px;
       cursor: pointer;
-      box-shadow: 0 6px 20px rgba(110, 69, 226, 0.4);
-      transition: transform 0.2s, active 0.2s;
-      margin-top: 10px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      position: relative;
+      overflow: hidden;
     }
 
-    button:active { transform: scale(0.98); }
+    button:active {
+      transform: scale(0.98);
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    }
 
-    /* ผลลัพธ์ */
+    button::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    button:active::before {
+      width: 300px;
+      height: 300px;
+    }
+
     .result {
-      margin-top: 30px;
-      padding: 25px;
+      margin-top: 28px;
+      padding: 0;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .result-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 16px 16px 0 0;
+      margin-bottom: 16px;
+    }
+
+    .customer-name {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .reading-info {
+      font-size: 15px;
+      opacity: 0.95;
+    }
+
+    .cards-container {
+      padding: 0 4px 4px;
+    }
+
+    .card {
       background: white;
-      color: #333;
+      padding: 18px;
+      border-radius: 14px;
+      margin-bottom: 14px;
+      border: 2px solid #f7fafc;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      transition: all 0.3s ease;
+      animation: cardSlideIn 0.4s ease-out backwards;
+    }
+
+    .card:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
+    @keyframes cardSlideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .card:nth-child(1) { animation-delay: 0.1s; }
+    .card:nth-child(2) { animation-delay: 0.2s; }
+    .card:nth-child(3) { animation-delay: 0.3s; }
+    .card:nth-child(4) { animation-delay: 0.4s; }
+    .card:nth-child(5) { animation-delay: 0.5s; }
+    .card:nth-child(6) { animation-delay: 0.6s; }
+    .card:nth-child(7) { animation-delay: 0.7s; }
+    .card:nth-child(8) { animation-delay: 0.8s; }
+    .card:nth-child(9) { animation-delay: 0.9s; }
+    .card:nth-child(10) { animation-delay: 1s; }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
       border-radius: 20px;
-      text-align: center;
-      animation: fadeInUp 0.5s ease-out;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: 0.3px;
     }
 
-    .result b { color: var(--primary-color); font-size: 24px; }
-
-    .card-item {
-      background: #f8f9fa;
-      margin: 10px 0;
-      padding: 15px;
-      border-radius: 12px;
-      border-left: 5px solid var(--primary-color);
+    .card-title {
       font-size: 20px;
-      font-weight: bold;
+      font-weight: 800;
+      color: #2d3748;
+      margin-bottom: 10px;
+      line-height: 1.3;
     }
 
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .card-meaning {
+      color: #4a5568;
+      font-size: 16px;
+      line-height: 1.6;
     }
 
-    .loading-dots:after {
-      content: ' .';
-      animation: dots 1s steps(5, end) infinite;
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 40px 20px;
+      color: #667eea;
+      font-size: 18px;
     }
-    @keyframes dots { 0%, 20% { color: rgba(0,0,0,0); text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); } 40% { color: white; text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); } 60% { text-shadow: .25em 0 0 white, .5em 0 0 rgba(0,0,0,0); } 80%, 100% { text-shadow: .25em 0 0 white, .5em 0 0 white; } }
+
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #e2e8f0;
+      border-top-color: #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 24px 20px;
+        border-radius: 20px;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      label {
+        font-size: 16px;
+      }
+
+      input, select, button {
+        font-size: 16px;
+      }
+
+      .card-title {
+        font-size: 19px;
+      }
+
+      .card-meaning {
+        font-size: 15px;
+      }
+    }
+
+    /* Smooth scroll behavior */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Input placeholder styling */
+    input::placeholder {
+      color: #a0aec0;
+    }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <h1>🔮 ดูดวงไพ่ยิปซี</h1>
+  <div class="container">
+    <div class="header">
+      <h1>🔮 ดูดวงไพ่ยิปซี</h1>
+      <div class="subtitle">สุ่มไพ่ + แสดงคำทำนาย + บันทึกลง Google Sheet</div>
+    </div>
 
-  <div class="form-group">
-    <label>👤 ชื่อลูกค้า</label>
-    <input type="text" id="customerName" placeholder="ระบุชื่อเพื่อเริ่มคำทำนาย..." autocomplete="off">
+    <div class="form-group">
+      <label for="customerName">ชื่อลูกค้า</label>
+      <input type="text" id="customerName" placeholder="กรอกชื่อของคุณ..." />
+    </div>
+
+    <div class="form-group">
+      <label for="readingType">ประเภทการดู</label>
+      <select id="readingType">
+        <option value="1card">สุ่ม 1 ใบ</option>
+        <option value="ppf">3 ใบ (อดีต-ปัจจุบัน-อนาคต)</option>
+        <option value="love">ความรัก (คุณ/เขา/ความสัมพันธ์)</option>
+        <option value="work">การงาน (สถานการณ์/อุปสรรค/คำแนะนำ)</option>
+        <option value="money">การเงิน (สถานะ/ระวัง/โอกาส)</option>
+        <option value="celtic">Celtic Cross (10 ใบ)</option>
+      </select>
+    </div>
+
+    <button onclick="startReading()">
+      <span>เริ่มดูไพ่</span>
+    </button>
+
+    <div class="loading" id="loadingBox">
+      <div class="loading-spinner"></div>
+      <div>กำลังสุ่มไพ่...</div>
+    </div>
+
+    <div class="result" id="resultBox" style="display:none;"></div>
   </div>
-
-  <div class="form-group">
-    <label>🃏 รูปแบบการสุ่ม</label>
-    <select id="readingType">
-      <option value="1">สุ่มแบบ 1 ใบ (เน้นๆ)</option>
-      <option value="3">สุ่มแบบ 3 ใบ (อดีต/ปัจจุบัน/อนาคต)</option>
-    </select>
-  </div>
-
-  <button id="btnRead" onclick="startReading()">เริ่มเปิดไพ่พยากรณ์</button>
-
-  <div class="result" id="resultBox" style="display:none;"></div>
-</div>
 
 <script>
-const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/10ojAqTG3f0CcWpQIRjBlQm3Kl8wxsf8-byldxz_3WDk/gviz/tq?tqx=out:csv&sheet=Cards";
-const SAVE_API_URL = "https://script.google.com/macros/s/AKfycbz3Hbab-2KoBGat94JQh1Z_0XZ2eweqTtHAFW7imYFwcfQzB_5EWAM_iMftztahyX4e/exec";
+  // ดึงข้อมูลจากชีต Cards: A=ชื่อไพ่, B=คำทำนาย
+  const SHEET_CSV_URL =
+    "https://docs.google.com/spreadsheets/d/10ojAqTG3f0CcWpQIRjBlQm3Kl8wxsf8-byldxz_3WDk/gviz/tq?tqx=out:csv&sheet=Cards";
 
-let cards = [];
+  // 🔴 ใส่ URL Web App (Apps Script) ที่ Deploy แล้ว (อันล่างที่เป็น URL)
+  const SAVE_API_URL = "https://script.google.com/macros/s/AKfycbw3LF7R5x5a7OfW7DGWNNd-JNcLOkpB1N1nSsEqut2GRowDQZd9xzy6SLDTY2h2uaaP/exec";
 
-// ดึงข้อมูลไพ่
-fetch(SHEET_CSV_URL)
-  .then(res => res.text())
-  .then(text => {
-    const lines = text.split("\n");
-    cards = lines.map(l => l.replace(/"/g, "").trim()).filter(l => l);
-    console.log("Cards Loaded:", cards.length);
-  });
+  // config ประเภทการดู
+  const READING_CONFIG = {
+    "1card": { label: "สุ่ม 1 ใบ", n: 1, slots: ["คำแนะนำ/ภาพรวม"] },
+    "ppf":   { label: "อดีต-ปัจจุบัน-อนาคต", n: 3, slots: ["อดีต", "ปัจจุบัน", "อนาคต"] },
+    "love":  { label: "ความรัก", n: 3, slots: ["คุณ", "เขา", "ความสัมพันธ์"] },
+    "work":  { label: "การงาน", n: 3, slots: ["สถานการณ์", "อุปสรรค", "คำแนะนำ"] },
+    "money": { label: "การเงิน", n: 3, slots: ["สถานะการเงิน", "สิ่งที่ต้องระวัง", "โอกาส/แนวทาง"] },
+    "celtic":{ label: "Celtic Cross", n: 10, slots: [
+      "สถานการณ์ปัจจุบัน (Present)",
+      "อุปสรรค/สิ่งท้าทาย (Challenge)",
+      "รากเหตุ/อดีต (Root/Past)",
+      "สิ่งที่กำลังจะเกิด (Near Future)",
+      "เป้าหมาย/ความคิด (Goal/Conscious)",
+      "จิตใต้สำนึก (Unconscious)",
+      "ตัวคุณ/ท่าที (You)",
+      "สิ่งแวดล้อม/คนรอบตัว (Environment)",
+      "ความหวัง/ความกลัว (Hopes/Fears)",
+      "ผลลัพธ์ (Outcome)"
+    ] }
+  };
 
-function randomCards(n) {
-  const shuffled = [...cards].sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, n);
-}
+  let cards = []; // [{name, meaning}]
 
-function startReading() {
-  const nameInput = document.getElementById("customerName");
-  const name = nameInput.value.trim();
-  const type = parseInt(document.getElementById("readingType").value, 10);
-  const btn = document.getElementById("btnRead");
+  // โหลดไพ่จาก Google Sheet
+  fetch(SHEET_CSV_URL)
+    .then(res => res.text())
+    .then(text => {
+      const lines = text.split("\n");
+      let startIdx = 0;
+      if (lines[0] && /card|meaning|name/i.test(lines[0])) startIdx = 1;
 
-  if (!name) {
-    alert("กรุณากรอกชื่อลูกค้าก่อนครับ");
-    return;
-  }
+      cards = lines.slice(startIdx).map(line => {
+        const cols = line.split(",");
+        const name = (cols[0] || "").replace(/"/g, "").trim();
+        const meaning = (cols.slice(1).join(",") || "").replace(/"/g, "").trim();
+        return { name, meaning };
+      }).filter(c => c.name);
 
-  if (cards.length === 0) {
-    alert("กำลังโหลดข้อมูลไพ่ กรุณารอสักครู่...");
-    return;
-  }
-
-  // แสดงสถานะกำลังประมวลผล
-  btn.disabled = true;
-  btn.innerText = "กำลังอัญเชิญไพ่...";
-
-  const picked = randomCards(type);
-
-  // สร้าง HTML ผลลัพธ์
-  let html = `<div style="font-size:18px; color:#666;">ผลทำนายของคุณ</div>`;
-  html += `<div style="margin-bottom:15px;"><b>${name}</b></div><hr style="border:0; border-top:1px solid #eee;">`;
-  
-  picked.forEach((card, index) => {
-    const label = type === 1 ? "ไพ่ที่ได้" : `ใบที่ ${index + 1}`;
-    html += `<div class="card-item"><small style="display:block; font-size:12px; color:#888; font-weight:normal;">${label}</small>${card}</div>`;
-  });
-
-  const box = document.getElementById("resultBox");
-  box.innerHTML = html;
-  box.style.display = "block";
-
-  // บันทึกลง Google Sheet
-  fetch(SAVE_API_URL, {
-    method: "POST",
-    mode: "no-cors", // เพื่อป้องกันปัญหา CORS ในเบื้องต้น
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      name: name,
-      type: type === 1 ? "1 card" : "3 cards",
-      cards: picked.join(", ")
+      console.log("Loaded cards:", cards.length);
     })
-  }).then(() => {
-    btn.disabled = false;
-    btn.innerText = "เริ่มดูไพ่ใหม่อีกครั้ง";
-  }).catch(() => {
-    btn.disabled = false;
-    btn.innerText = "เริ่มดูไพ่ใหม่อีกครั้ง";
+    .catch(err => {
+      console.error(err);
+      alert("โหลดข้อมูลไพ่ไม่สำเร็จ กรุณาตรวจสอบว่า Cards publish ได้และเข้าถึงได้");
+    });
+
+  function randomUniqueCards(n) {
+    const shuffled = [...cards].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, n);
+  }
+
+  function escapeHtml(s) {
+    return (s || "").replace(/[&<>"']/g, m => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
+    }[m]));
+  }
+
+  function startReading() {
+    const customer = document.getElementById("customerName").value.trim();
+    const typeKey = document.getElementById("readingType").value;
+
+    if (!customer) {
+      alert("กรุณากรอกชื่อลูกค้า");
+      return;
+    }
+    if (!READING_CONFIG[typeKey]) {
+      alert("ประเภทการดูไม่ถูกต้อง");
+      return;
+    }
+    if (cards.length === 0) {
+      alert("ยังโหลดข้อมูลไพ่ไม่สำเร็จ");
+      return;
+    }
+
+    const cfg = READING_CONFIG[typeKey];
+
+    // แสดง loading
+    const loadingBox = document.getElementById("loadingBox");
+    const resultBox = document.getElementById("resultBox");
+    resultBox.style.display = "none";
+    loadingBox.style.display = "block";
+
+    // จำลองการสุ่มไพ่ (ให้มี delay เล็กน้อยเพื่อ UX)
+    setTimeout(() => {
+      const picked = randomUniqueCards(cfg.n);
+
+      // สร้าง HTML แสดงผล
+      let cardsHtml = '';
+      picked.forEach((c, i) => {
+        const slot = cfg.slots[i] || `ใบที่ ${i+1}`;
+        cardsHtml += `
+          <div class="card">
+            <div class="badge">${escapeHtml(slot)}</div>
+            <div class="card-title">${escapeHtml(c.name)}</div>
+            <div class="card-meaning">${escapeHtml(c.meaning || "-")}</div>
+          </div>
+        `;
+      });
+
+      const html = `
+        <div class="result-header">
+          <div class="customer-name">👤 ${escapeHtml(customer)}</div>
+          <div class="reading-info">ประเภท: ${escapeHtml(cfg.label)} • จำนวนไพ่: ${cfg.n} ใบ</div>
+        </div>
+        <div class="cards-container">
+          ${cardsHtml}
+        </div>
+      `;
+
+      loadingBox.style.display = "none";
+      resultBox.innerHTML = html;
+      resultBox.style.display = "block";
+
+      // Scroll to result
+      setTimeout(() => {
+        resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 100);
+
+      // บันทึกลง Log
+      const payload = {
+        name: customer,
+        type: cfg.label,
+        cards: picked.map(x => x.name).join(", ")
+      };
+
+      fetch(SAVE_API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      }).catch(err => {
+        console.error("Save error:", err);
+      });
+    }, 800);
+  }
+
+  // เพิ่ม Enter key support
+  document.getElementById("customerName").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+      startReading();
+    }
   });
-}
 </script>
 
 </body>
