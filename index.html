@@ -2,72 +2,163 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>Tarot Web App</title>
+  <title>Tarot Web App - Modern</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary-color: #6e45e2;
+      --secondary-color: #88d3ce;
+      --bg-dark: #1a1a2e;
+      --card-bg: #ffffff;
+      --text-main: #333;
+    }
+
+    * { box-sizing: border-box; font-family: 'Sarabun', sans-serif; }
+
     body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      margin: 0;
       padding: 20px;
-      max-width: 480px;
-      margin: auto;
-    }
-    h1 { text-align: center; }
-    label { display: block; margin-top: 15px; }
-    input, select, button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 5px;
-      font-size: 18px;
-    }
-    button {
-      margin-top: 20px;
-      background: #6f42c1;
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
       color: white;
-      border: none;
-      border-radius: 6px;
     }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      padding: 30px 20px;
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 32px;
+      margin-bottom: 30px;
+      background: linear-gradient(to right, #fff, #a18cd1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    }
+
+    .form-group { margin-bottom: 20px; }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 18px;
+      color: #ccc;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 16px;
+      font-size: 18px;
+      border-radius: 12px;
+      border: 2px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.9);
+      color: #000;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    input:focus { border-color: var(--primary-color); box-shadow: 0 0 10px rgba(110, 69, 226, 0.5); }
+
+    button {
+      width: 100%;
+      padding: 18px;
+      font-size: 20px;
+      font-weight: bold;
+      color: white;
+      background: linear-gradient(45deg, #6e45e2, #88d3ce);
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(110, 69, 226, 0.4);
+      transition: transform 0.2s, active 0.2s;
+      margin-top: 10px;
+    }
+
+    button:active { transform: scale(0.98); }
+
+    /* ผลลัพธ์ */
     .result {
       margin-top: 30px;
-      padding: 20px;
+      padding: 25px;
       background: white;
-      border-radius: 8px;
+      color: #333;
+      border-radius: 20px;
       text-align: center;
-      font-size: 20px;
+      animation: fadeInUp 0.5s ease-out;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     }
+
+    .result b { color: var(--primary-color); font-size: 24px; }
+
+    .card-item {
+      background: #f8f9fa;
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 12px;
+      border-left: 5px solid var(--primary-color);
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .loading-dots:after {
+      content: ' .';
+      animation: dots 1s steps(5, end) infinite;
+    }
+    @keyframes dots { 0%, 20% { color: rgba(0,0,0,0); text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); } 40% { color: white; text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); } 60% { text-shadow: .25em 0 0 white, .5em 0 0 rgba(0,0,0,0); } 80%, 100% { text-shadow: .25em 0 0 white, .5em 0 0 white; } }
   </style>
 </head>
 <body>
 
-<h1>🔮 ดูดวงไพ่ยิปซี</h1>
+<div class="container">
+  <h1>🔮 ดูดวงไพ่ยิปซี</h1>
 
-<label>ชื่อลูกค้า</label>
-<input type="text" id="customerName" placeholder="กรอกชื่อ...">
+  <div class="form-group">
+    <label>👤 ชื่อลูกค้า</label>
+    <input type="text" id="customerName" placeholder="ระบุชื่อเพื่อเริ่มคำทำนาย..." autocomplete="off">
+  </div>
 
-<label>รูปแบบการดูไพ่</label>
-<select id="readingType">
-  <option value="1">สุ่ม 1 ใบ</option>
-  <option value="3">สุ่ม 3 ใบ</option>
-</select>
+  <div class="form-group">
+    <label>🃏 รูปแบบการสุ่ม</label>
+    <select id="readingType">
+      <option value="1">สุ่มแบบ 1 ใบ (เน้นๆ)</option>
+      <option value="3">สุ่มแบบ 3 ใบ (อดีต/ปัจจุบัน/อนาคต)</option>
+    </select>
+  </div>
 
-<button onclick="startReading()">เริ่มดูไพ่</button>
+  <button id="btnRead" onclick="startReading()">เริ่มเปิดไพ่พยากรณ์</button>
 
-<div class="result" id="resultBox" style="display:none;"></div>
+  <div class="result" id="resultBox" style="display:none;"></div>
+</div>
 
 <script>
 const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/10ojAqTG3f0CcWpQIRjBlQm3Kl8wxsf8-byldxz_3WDk/gviz/tq?tqx=out:csv&sheet=Cards";
-
-// 🔴 วาง URL จาก Apps Script Web App ตรงนี้
 const SAVE_API_URL = "https://script.google.com/macros/s/AKfycbz3Hbab-2KoBGat94JQh1Z_0XZ2eweqTtHAFW7imYFwcfQzB_5EWAM_iMftztahyX4e/exec";
 
 let cards = [];
 
-// โหลดรายชื่อไพ่
+// ดึงข้อมูลไพ่
 fetch(SHEET_CSV_URL)
   .then(res => res.text())
   .then(text => {
     const lines = text.split("\n");
     cards = lines.map(l => l.replace(/"/g, "").trim()).filter(l => l);
+    console.log("Cards Loaded:", cards.length);
   });
 
 function randomCards(n) {
@@ -76,29 +167,35 @@ function randomCards(n) {
 }
 
 function startReading() {
-  const name = document.getElementById("customerName").value.trim();
+  const nameInput = document.getElementById("customerName");
+  const name = nameInput.value.trim();
   const type = parseInt(document.getElementById("readingType").value, 10);
+  const btn = document.getElementById("btnRead");
 
   if (!name) {
-    alert("กรุณากรอกชื่อลูกค้า");
+    alert("กรุณากรอกชื่อลูกค้าก่อนครับ");
     return;
   }
 
   if (cards.length === 0) {
-    alert("ยังโหลดข้อมูลไพ่ไม่สำเร็จ");
+    alert("กำลังโหลดข้อมูลไพ่ กรุณารอสักครู่...");
     return;
   }
 
+  // แสดงสถานะกำลังประมวลผล
+  btn.disabled = true;
+  btn.innerText = "กำลังอัญเชิญไพ่...";
+
   const picked = randomCards(type);
 
-  let html = `<div>👤 <b>${name}</b></div><hr>`;
-  if (type === 1) {
-    html += `<div>ไพ่ที่ได้: <b>${picked[0]}</b></div>`;
-  } else {
-    html += `<div>ใบที่ 1: <b>${picked[0]}</b></div>`;
-    html += `<div>ใบที่ 2: <b>${picked[1]}</b></div>`;
-    html += `<div>ใบที่ 3: <b>${picked[2]}</b></div>`;
-  }
+  // สร้าง HTML ผลลัพธ์
+  let html = `<div style="font-size:18px; color:#666;">ผลทำนายของคุณ</div>`;
+  html += `<div style="margin-bottom:15px;"><b>${name}</b></div><hr style="border:0; border-top:1px solid #eee;">`;
+  
+  picked.forEach((card, index) => {
+    const label = type === 1 ? "ไพ่ที่ได้" : `ใบที่ ${index + 1}`;
+    html += `<div class="card-item"><small style="display:block; font-size:12px; color:#888; font-weight:normal;">${label}</small>${card}</div>`;
+  });
 
   const box = document.getElementById("resultBox");
   box.innerHTML = html;
@@ -107,12 +204,19 @@ function startReading() {
   // บันทึกลง Google Sheet
   fetch(SAVE_API_URL, {
     method: "POST",
+    mode: "no-cors", // เพื่อป้องกันปัญหา CORS ในเบื้องต้น
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       name: name,
       type: type === 1 ? "1 card" : "3 cards",
       cards: picked.join(", ")
     })
+  }).then(() => {
+    btn.disabled = false;
+    btn.innerText = "เริ่มดูไพ่ใหม่อีกครั้ง";
+  }).catch(() => {
+    btn.disabled = false;
+    btn.innerText = "เริ่มดูไพ่ใหม่อีกครั้ง";
   });
 }
 </script>
