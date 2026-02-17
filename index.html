@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>Tarot Web App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+      max-width: 480px;
+      margin: auto;
+    }
+    h1 { text-align: center; }
+    label { display: block; margin-top: 15px; }
+    input, select, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 5px;
+      font-size: 18px;
+    }
+    button {
+      margin-top: 20px;
+      background: #6f42c1;
+      color: white;
+      border: none;
+      border-radius: 6px;
+    }
+    .result {
+      margin-top: 30px;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🔮 ดูดวงไพ่ยิปซี</h1>
+
+<label>ชื่อลูกค้า</label>
+<input type="text" id="customerName" placeholder="กรอกชื่อ...">
+
+<label>รูปแบบการดูไพ่</label>
+<select id="readingType">
+  <option value="1">สุ่ม 1 ใบ</option>
+  <option value="3">สุ่ม 3 ใบ</option>
+</select>
+
+<button onclick="startReading()">เริ่มดูไพ่</button>
+
+<div class="result" id="resultBox" style="display:none;"></div>
+
+<script>
+const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/10ojAqTG3f0CcWpQIRjBlQm3Kl8wxsf8-byldxz_3WDk/gviz/tq?tqx=out:csv&sheet=Cards";
+
+// 🔴 วาง URL จาก Apps Script Web App ตรงนี้
+const SAVE_API_URL = "https://script.google.com/macros/s/AKfycbz3Hbab-2KoBGat94JQh1Z_0XZ2eweqTtHAFW7imYFwcfQzB_5EWAM_iMftztahyX4e/exec";
+
+let cards = [];
+
+// โหลดรายชื่อไพ่
+fetch(SHEET_CSV_URL)
+  .then(res => res.text())
+  .then(text => {
+    const lines = text.split("\n");
+    cards = lines.map(l => l.replace(/"/g, "").trim()).filter(l => l);
+  });
+
+function randomCards(n) {
+  const shuffled = [...cards].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, n);
+}
+
+function startReading() {
+  const name = document.getElementById("customerName").value.trim();
+  const type = parseInt(document.getElementById("readingType").value, 10);
+
+  if (!name) {
+    alert("กรุณากรอกชื่อลูกค้า");
+    return;
+  }
+
+  if (cards.length === 0) {
+    alert("ยังโหลดข้อมูลไพ่ไม่สำเร็จ");
+    return;
+  }
+
+  const picked = randomCards(type);
+
+  let html = `<div>👤 <b>${name}</b></div><hr>`;
+  if (type === 1) {
+    html += `<div>ไพ่ที่ได้: <b>${picked[0]}</b></div>`;
+  } else {
+    html += `<div>ใบที่ 1: <b>${picked[0]}</b></div>`;
+    html += `<div>ใบที่ 2: <b>${picked[1]}</b></div>`;
+    html += `<div>ใบที่ 3: <b>${picked[2]}</b></div>`;
+  }
+
+  const box = document.getElementById("resultBox");
+  box.innerHTML = html;
+  box.style.display = "block";
+
+  // บันทึกลง Google Sheet
+  fetch(SAVE_API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name: name,
+      type: type === 1 ? "1 card" : "3 cards",
+      cards: picked.join(", ")
+    })
+  });
+}
+</script>
+
+</body>
+</html>
