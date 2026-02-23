@@ -1,496 +1,367 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8" />
-  <title>Tarot Web App</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aex Hair Design Receipt</title>
+    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0a0a0a 100%);
-      min-height: 100vh;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+    <style>
+        :root { --line: #ececec; --text: #000; --accent: #1a4da3; }
+        * { box-sizing: border-box; font-family: 'Anuphan', sans-serif; -webkit-print-color-adjust: exact; }
+        body { background: #f4f4f4; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; color: var(--text); }
 
-    .container {
-      width: 100%;
-      max-width: 500px;
-      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-      border-radius: 24px;
-      padding: 28px 24px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(59, 130, 246, 0.2);
-      animation: slideUp 0.4s ease-out;
-      border: 1px solid rgba(59, 130, 246, 0.3);
-    }
+        /* Logo Styling */
+        .logo-wrapper {
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        .logo-wrapper img {
+            max-width: 60px; /* ขนาดโลโก้ */
+            height: auto;
+            border-radius: 50%;
+        }
 
-    @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+        .container { 
+            background: #fff; width: 100%; max-width: 140mm; min-height: 100vh;
+            padding: 15px 20px; display: flex; flex-direction: column; position: relative;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
 
-    .header {
-      text-align: center;
-      margin-bottom: 24px;
-    }
+        header { text-align: center; margin-bottom: 5px; }
+        h1 { letter-spacing: 1px; font-size: 18px; margin: 0; font-weight: 700; text-transform: uppercase; }
+        .shop-info { font-size: 13px; color: #666; margin-bottom: 10px; }
 
-    h1 {
-      font-size: 32px;
-      font-weight: 700;
-      color: #60a5fa;
-      margin-bottom: 8px;
-      letter-spacing: -0.5px;
-      text-shadow: 0 0 20px rgba(96, 165, 250, 0.5);
-    }
+        .info-grid { 
+            display: grid; grid-template-columns: 1fr 1fr; gap: 10px 15px; 
+            margin: 5px 0; padding: 10px 0; border-top: 2.5px solid #000; border-bottom: 1px solid var(--line);
+        }
+        @media (max-width: 450px) { .info-grid { grid-template-columns: 1fr; } }
 
-    .subtitle {
-      color: #94a3b8;
-      font-size: 16px;
-      line-height: 1.5;
-    }
+        .field { display: flex; flex-direction: column; position: relative; }
+        .field label { font-size: 10px; font-weight: 700; color: #888; text-transform: uppercase; }
+        .field input, .field select { border: none; font-size: 16px; padding: 4px 0; outline: none; background: transparent; font-weight: 600; border-bottom: 1px solid #f0f0f0; font-family: 'Anuphan'; }
 
-    .form-group {
-      margin-bottom: 20px;
-    }
+        .datetime-group { display: flex; gap: 10px; align-items: flex-end; border-bottom: 1px solid #f0f0f0; }
+        #dateInput { border: none; font-size: 16px; font-weight: 600; flex: 2; padding: 4px 0; cursor: pointer; outline: none; background: transparent; }
+        #timeInput { border: none; font-size: 16px; font-weight: 600; flex: 1; padding: 4px 0; outline: none; text-align: right; background: transparent; }
+        
+        .print-only { display: none; }
 
-    label {
-      display: block;
-      font-size: 17px;
-      font-weight: 600;
-      color: #bfdbfe;
-      margin-bottom: 10px;
-    }
+        .section-title { font-size: 11px; font-weight: 700; color: #888; margin-top: 15px; margin-bottom: 5px; text-transform: uppercase; }
+        .length-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 10px; }
+        .len-item { font-size: 14px; display: flex; align-items: center; cursor: pointer; font-weight: 600; white-space: nowrap; }
+        .len-item input { margin-right: 6px; width: 18px; height: 18px; accent-color: #000; }
 
-    input, select {
-      width: 100%;
-      padding: 16px 18px;
-      font-size: 17px;
-      border-radius: 14px;
-      border: 2px solid #e2e8f0;
-      background: #ffffff;
-      color: #2d3748;
-      transition: all 0.3s ease;
-      -webkit-appearance: none;
-      appearance: none;
-    }
+        .services-area { display: flex; flex-direction: column; gap: 5px; flex-grow: 1; }
+        .cat-head { font-size: 14px; font-weight: 700; border-bottom: 2px solid #000; padding-bottom: 2px; margin-top: 12px; margin-bottom: 8px; }
+        .item { display: flex; align-items: baseline; margin-bottom: 6px; width: 100%; }
+        .item-label { font-size: 15px; font-weight: 500; display: flex; align-items: center; white-space: nowrap; }
+        .item-label input[type="checkbox"] { margin-right: 10px; width: 18px; height: 18px; accent-color: #000; }
+        .dots { flex-grow: 1; border-bottom: 1.5px dotted #ccc; margin: 0 5px; height: 12px; }
+        .price-input { width: 70px; border: none; text-align: right; font-size: 16px; font-weight: 600; background: transparent; outline: none; border-bottom: 1px solid #eee; }
 
-    input:focus, select:focus {
-      outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
-    }
+        .other-input { border: none; border-bottom: 1px solid #eee; font-size: 15px; width: 110px; outline: none; background: transparent; font-weight: 500; }
 
-    select {
-      background-image: url("data:image/svg+xml,%3Csvg width='14' height='8' viewBox='0 0 14 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L7 7L13 1' stroke='%232d3748' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 18px center;
-      padding-right: 48px;
-      cursor: pointer;
-    }
+        .footer-section { margin-top: 20px; padding-top: 10px; border-top: 3px solid #000; }
+        .sum-row { display: flex; justify-content: space-between; align-items: center; font-size: 14px; margin-bottom: 5px; }
+        .total-row { font-size: 22px; font-weight: 700; color: #000; padding: 8px 0; border-top: 1px solid #eee; }
+        .total-row span:last-child { font-size: 30px; }
+        
+        textarea { width: 100%; height: 60px; border: 1px dashed #ccc; padding: 8px; font-size: 14px; border-radius: 4px; resize: none; margin-top: 10px; font-family: 'Anuphan'; }
 
-    button {
-      width: 100%;
-      padding: 18px;
-      margin-top: 8px;
-      font-size: 19px;
-      font-weight: 700;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border: none;
-      border-radius: 14px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-      position: relative;
-      overflow: hidden;
-    }
+        #qrContainer { text-align: center; margin-top: 15px; display: none; }
+        #qrContainer img { width: 160px; height: 160px; border: 1px solid #eee; padding: 5px; }
+        #qrContainer p { font-size: 12px; font-weight: 600; margin: 5px 0; color: var(--accent); }
 
-    button:active {
-      transform: scale(0.98);
-      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-    }
+        .btn-group { width: 100%; max-width: 148mm; display: flex; gap: 10px; padding: 15px; }
+        button { flex: 1; padding: 18px; border: none; border-radius: 12px; font-weight: 700; font-size: 16px; cursor: pointer; transition: 0.2s; }
+        .btn-save { background: #000; color: #fff; }
+        .btn-print { background: #e0e0e0; color: #000; }
 
-    button::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.2);
-      transform: translate(-50%, -50%);
-      transition: width 0.6s, height 0.6s;
-    }
-
-    button:active::before {
-      width: 300px;
-      height: 300px;
-    }
-
-    .result {
-      margin-top: 28px;
-      padding: 0;
-      animation: fadeIn 0.5s ease-out;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .result-header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 20px;
-      border-radius: 16px 16px 0 0;
-      margin-bottom: 16px;
-    }
-
-    .customer-name {
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-
-    .reading-info {
-      font-size: 15px;
-      opacity: 0.95;
-    }
-
-    .cards-container {
-      padding: 0 4px 4px;
-    }
-
-    .card {
-      background: white;
-      padding: 18px;
-      border-radius: 14px;
-      margin-bottom: 14px;
-      border: 2px solid #f7fafc;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-      transition: all 0.3s ease;
-      animation: cardSlideIn 0.4s ease-out backwards;
-    }
-
-    .card:hover {
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-      transform: translateY(-2px);
-    }
-
-    @keyframes cardSlideIn {
-      from {
-        opacity: 0;
-        transform: translateX(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-
-    .card:nth-child(1) { animation-delay: 0.1s; }
-    .card:nth-child(2) { animation-delay: 0.2s; }
-    .card:nth-child(3) { animation-delay: 0.3s; }
-    .card:nth-child(4) { animation-delay: 0.4s; }
-    .card:nth-child(5) { animation-delay: 0.5s; }
-    .card:nth-child(6) { animation-delay: 0.6s; }
-    .card:nth-child(7) { animation-delay: 0.7s; }
-    .card:nth-child(8) { animation-delay: 0.8s; }
-    .card:nth-child(9) { animation-delay: 0.9s; }
-    .card:nth-child(10) { animation-delay: 1s; }
-
-    .badge {
-      display: inline-block;
-      padding: 6px 14px;
-      border-radius: 20px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      font-size: 14px;
-      font-weight: 700;
-      margin-bottom: 10px;
-      letter-spacing: 0.3px;
-    }
-
-    .card-title {
-      font-size: 20px;
-      font-weight: 800;
-      color: #2d3748;
-      margin-bottom: 10px;
-      line-height: 1.3;
-    }
-
-    .card-meaning {
-      color: #4a5568;
-      font-size: 16px;
-      line-height: 1.6;
-    }
-
-    .loading {
-      display: none;
-      text-align: center;
-      padding: 40px 20px;
-      color: #667eea;
-      font-size: 18px;
-    }
-
-    .loading-spinner {
-      width: 50px;
-      height: 50px;
-      border: 4px solid #e2e8f0;
-      border-top-color: #667eea;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 16px;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    @media (max-width: 480px) {
-      .container {
-        padding: 24px 20px;
-        border-radius: 20px;
-      }
-
-      h1 {
-        font-size: 28px;
-      }
-
-      label {
-        font-size: 16px;
-      }
-
-      input, select, button {
-        font-size: 16px;
-      }
-
-      .card-title {
-        font-size: 19px;
-      }
-
-      .card-meaning {
-        font-size: 15px;
-      }
-    }
-
-    /* Smooth scroll behavior */
-    html {
-      scroll-behavior: smooth;
-    }
-
-    /* Input placeholder styling */
-    input::placeholder {
-      color: #a0aec0;
-    }
-  </style>
+        @media print {
+            .no-print { display: none !important; }
+            #qrContainer.show-print { display: block !important; }
+            body { background: #fff; }
+            .container { width: 148mm; min-height: 0; height: auto; padding: 5mm 10mm; box-shadow: none; }
+            .services-area { display: grid; grid-template-columns: 1fr 1fr; gap: 0 30px; }
+            .price-input, .other-input { border: none; }
+            .print-only { display: inline-block !important; font-size: 16px; font-weight: 600; }
+            #dateInput, #timeInput { display: none !important; }
+            .datetime-group { border-bottom: none; }
+            input::placeholder { color: transparent; }
+        }
+    </style>
 </head>
 <body>
 
-  <div class="container">
-    <div class="header">
-      <h1>🔮 ดูดวงไพ่ยิปซี</h1>
-      <div class="subtitle">สุ่มไพ่ + แสดงคำทำนาย + บันทึกลง Google Sheet</div>
+<div class="container">
+    <header>
+        <div class="logo-wrapper">
+            <img src="https://lh3.googleusercontent.com/d/1TjE7MQ4bkXjAaYgWBb6txNOA9kLoAWNI" alt="Aex Hair Design Logo">
+        </div>
+        <h1>Aex Hair Design</h1>
+        <div class="shop-info">Tel: 089-883-7065</div>
+    </header>
+
+    <div class="info-grid">
+        <div class="field"><label>Customer Name *</label><input type="text" id="name" placeholder="ชื่อลูกค้า"></div>
+        <div class="field"><label>Phone Number</label><input type="text" id="phone" placeholder="0xx-xxx-xxxx"></div>
+        <div class="field">
+            <label>Stylist *</label>
+            <select id="stylist">
+                <option value="" disabled selected>เลือกช่าง</option>
+                <option value="Aex">Aex</option>
+                <option value="ลูกน้ำ">ลูกน้ำ</option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Date / Time</label>
+            <div class="datetime-group">
+                <input type="date" id="dateInput">
+                <span id="dateText" class="print-only"></span>
+                <input type="time" id="timeInput" min="09:00" max="20:00">
+                <span id="timeText" class="print-only"></span>
+            </div>
+        </div>
     </div>
 
-    <div class="form-group">
-      <label for="customerName">ชื่อลูกค้า</label>
-      <input type="text" id="customerName" placeholder="กรอกชื่อของคุณ..." />
+    <div class="length-area">
+        <div class="section-title">HAIR LENGTH</div>
+        <div class="length-row">
+            <label class="len-item"><input type="radio" name="len" value="S"> S</label>
+            <label class="len-item"><input type="radio" name="len" value="M"> M</label>
+            <label class="len-item"><input type="radio" name="len" value="L"> L</label>
+            <label class="len-item"><input type="radio" name="len" value="XL"> XL</label>
+            <label class="len-item"><input type="radio" name="len" value="XXL"> XXL</label>
+        </div>
     </div>
 
-    <div class="form-group">
-      <label for="readingType">ประเภทการดู</label>
-      <select id="readingType">
-        <option value="1card">สุ่ม 1 ใบ</option>
-        <option value="ppf">3 ใบ (อดีต-ปัจจุบัน-อนาคต)</option>
-        <option value="love">ความรัก (คุณ/เขา/ความสัมพันธ์)</option>
-        <option value="work">การงาน (สถานการณ์/อุปสรรค/คำแนะนำ)</option>
-        <option value="money">การเงิน (สถานะ/ระวัง/โอกาส)</option>
-        <option value="celtic">Celtic Cross (10 ใบ)</option>
-      </select>
+    <div class="services-area">
+        <div class="col-left">
+            <div class="cat-head">สระไดร์ & ตัดผม</div>
+            <div class="item"><label class="item-label"><input type="checkbox" value="สระไดร์"> สระไดร์</label><span class="dots"></span><input type="number" class="price-input" placeholder="0"></div>
+            <div class="item"><label class="item-label"><input type="checkbox" value="สระไดร์พรีเมียม"> สระไดร์พรีเมี่ยม</label><span class="dots"></span><input type="number" class="price-input" placeholder="0"></div>
+            <div class="item"><label class="item-label"><input type="checkbox" value="ตัดผมชาย"> ตัดผมชาย</label><span class="dots"></span><input type="number" class="price-input" placeholder="0"></div>
+            <div class="item"><label class="item-label"><input type="checkbox" value="ตัดผมหญิง"> ตัดผมหญิง</label><span class="dots"></span><input type="number" class="price-input" placeholder="0"></div>
+            <div class="cat-head">ทรีทเม้นต์</div>
+            <div class="item"><label class="item-label"><input type="checkbox" value="เคราติน"> เคราติน</label><span class="dots"></span><input type="number" class="price-input" placeholder="0"></div>
+            <div class="item"><label class="item-label"><input type="checkbox" value="ดีฟเลเยอร์"> ดีฟเลเยอร์</label><span class="dots"></span><input type="number" class="price-input" placeholder="0"></div>
+        </div>    
+        <div class="col-right">
+            <div class="cat-head">ทำสี & เคมี</div>
+            <div class="item"><label class="item-label"><input type="checkbox" value="ทำสีผม"> ทำสีผม</label><span class="dots"></span><input type="number" class="price-input" placeholder="0"></div>
+            <div class="item"><label class="item-label"><input type="checkbox" value="ทำสีไฮไลค์"> ทำสีไฮไลค์</label><span class="dots"></span><input type="number" class="price-input" placeholder="0"></div>
+            <div class="item"><label class="item-label"><input type="checkbox" value="ฟอกสีผม"> ฟอกสีผม</label><span class="dots"></span><input type="number" class="price-input" placeholder="0"></div>
+            <div class="cat-head">ยืด & ดัด</div>
+            <div class="item"><label class="item-label"><input type="checkbox" value="ดัดดิจิตอล"> ดัดดิจิตอล</label><span class="dots"></span><input type="number" class="price-input" placeholder="0"></div>
+            <div class="item"><label class="item-label"><input type="checkbox" value="ยืดผมตรง"> ยืดผมตรง</label><span class="dots"></span><input type="number" class="price-input" placeholder="0"></div>
+            <div class="item"><label class="item-label"><input type="checkbox" value="ยืดโคนดัดปลาย"> ยืดโคนดัดปลาย</label><span class="dots"></span><input type="number" class="price-input" placeholder="0"></div>
+            <div class="cat-head">อื่นๆ</div>
+            <div class="item">
+                <label class="item-label">
+                    <input type="checkbox" id="otherCheck" value="อื่นๆ">
+                    <input type="text" id="otherDetail" class="other-input" placeholder="อื่นๆ ระบุ..." oninput="document.getElementById('otherCheck').checked = this.value.length > 0; calculateTotal();">
+                </label>
+                <span class="dots"></span>
+                <input type="number" class="price-input" placeholder="0"></div>
+            </div>
+               </div>
+    <div class="footer-section">
+        <div class="payment-area">
+            <div class="section-title">PAYMENT METHOD</div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <label class="len-item"><input type="radio" name="pay" value="เงินสด" checked onclick="toggleQR(false)"> เงินสด</label>
+                <label class="len-item"><input type="radio" name="pay" value="โอน (PromptPay)" onclick="toggleQR(true)"> โอน (PromptPay)</label>
+                <label class="len-item"><input type="radio" name="pay" value="TrueWallet" onclick="toggleQR(false)"> TrueWallet</label>
+                <label class="len-item"><input type="radio" name="pay" value="บัตรเครดิต" onclick="toggleQR(false)"> บัตรเครดิต</label>
+            </div>
+        </div>
+
+        <div id="qrContainer">
+            <p>Scan เพื่อชำระเงิน (PromptPay)</p>
+            <img id="promptPayQr" src="" alt="QR Code">
+        </div>
+
+        <div class="sum-row" style="margin-top: 15px;"><span>ส่วนลด (DISCOUNT)</span><input type="number" id="discount" class="price-input" value="0"></div>
+        <div class="sum-row total-row"><span>ยอดสุทธิ (TOTAL)</span><span>฿ <span id="grandTotal">0</span></span></div>
+        <textarea id="note" placeholder="สูตรสี หรือบันทึกเพิ่มเติม..."></textarea>
     </div>
+</div>
 
-    <button onclick="startReading()">
-      <span>เริ่มดูไพ่</span>
-    </button>
-
-    <div class="loading" id="loadingBox">
-      <div class="loading-spinner"></div>
-      <div>กำลังสุ่มไพ่...</div>
-    </div>
-
-    <div class="result" id="resultBox" style="display:none;"></div>
-  </div>
+<div class="btn-group no-print">
+  <button class="btn-save" id="saveBtn" onclick="saveToSheets()">SAVE TO GOOGLE</button>
+  <button class="btn-print" onclick="handlePrint()">PRINT A5</button>
+</div>
 
 <script>
-  // ดึงข้อมูลจากชีต Cards: A=ชื่อไพ่, B=คำทำนาย
-  const SHEET_CSV_URL =
-    "https://docs.google.com/spreadsheets/d/10ojAqTG3f0CcWpQIRjBlQm3Kl8wxsf8-byldxz_3WDk/gviz/tq?tqx=out:csv&sheet=Cards";
+  const SHOP_PROMPTPAY_ID = "0898837065";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyfd-I7pBFDWQLlJuBBQ5kpRKBY-aAF4DzWwZv4fMYALbJcIZgJPD0nbioZwGH6ZlrW/exec";
 
-  // 🔴 ใส่ URL Web App (Apps Script) ที่ Deploy แล้ว (อันล่างที่เป็น URL)
-  const SAVE_API_URL = "https://script.google.com/macros/s/AKfycbyw79BpYTVp5IgZFeaoSCLn7stUm7Jh-MuND5xXcUCkddNTvPccrOSf208-Y-2khWWO/exec";
+  window.addEventListener("load", () => {
+    const today = new Date();
+    const y = today.getFullYear();
+    const m = String(today.getMonth() + 1).padStart(2, "0");
+    const d = String(today.getDate()).padStart(2, "0");
+    document.getElementById("dateInput").value = `${y}-${m}-${d}`;
 
-  // config ประเภทการดู
-  const READING_CONFIG = {
-    "1card": { label: "สุ่ม 1 ใบ", n: 1, slots: ["คำแนะนำ/ภาพรวม"] },
-    "ppf":   { label: "อดีต-ปัจจุบัน-อนาคต", n: 3, slots: ["อดีต", "ปัจจุบัน", "อนาคต"] },
-    "love":  { label: "ความรัก", n: 3, slots: ["คุณ", "เขา", "ความสัมพันธ์"] },
-    "work":  { label: "การงาน", n: 3, slots: ["สถานการณ์", "อุปสรรค", "คำแนะนำ"] },
-    "money": { label: "การเงิน", n: 3, slots: ["สถานะการเงิน", "สิ่งที่ต้องระวัง", "โอกาส/แนวทาง"] },
-    "celtic":{ label: "Celtic Cross", n: 10, slots: [
-      "สถานการณ์ปัจจุบัน (Present)",
-      "อุปสรรค/สิ่งท้าทาย (Challenge)",
-      "รากเหตุ/อดีต (Root/Past)",
-      "สิ่งที่กำลังจะเกิด (Near Future)",
-      "เป้าหมาย/ความคิด (Goal/Conscious)",
-      "จิตใต้สำนึก (Unconscious)",
-      "ตัวคุณ/ท่าที (You)",
-      "สิ่งแวดล้อม/คนรอบตัว (Environment)",
-      "ความหวัง/ความกลัว (Hopes/Fears)",
-      "ผลลัพธ์ (Outcome)"
-    ] }
-  };
+    let hours = today.getHours();
+    const minTime = 9;
+    const maxTime = 20;
+    if (hours < minTime) hours = minTime;
+    if (hours > maxTime) hours = maxTime;
 
-  let cards = []; // [{name, meaning}]
+    document.getElementById("timeInput").value =
+      String(hours).padStart(2, "0") + ":" + String(today.getMinutes()).padStart(2, "0");
 
-  // โหลดไพ่จาก Google Sheet
-  fetch(SHEET_CSV_URL)
-    .then(res => res.text())
-    .then(text => {
-      const lines = text.split("\n");
-      let startIdx = 0;
-      if (lines[0] && /card|meaning|name/i.test(lines[0])) startIdx = 1;
+    // ✅ คำนวณครั้งแรก
+    calculateTotal();
 
-      cards = lines.slice(startIdx).map(line => {
-        const cols = line.split(",");
-        const name = (cols[0] || "").replace(/"/g, "").trim();
-        const meaning = (cols.slice(1).join(",") || "").replace(/"/g, "").trim();
-        return { name, meaning };
-      }).filter(c => c.name);
-
-      console.log("Loaded cards:", cards.length);
-    })
-    .catch(err => {
-      console.error(err);
-      alert("โหลดข้อมูลไพ่ไม่สำเร็จ กรุณาตรวจสอบว่า Cards publish ได้และเข้าถึงได้");
+    // ✅ bind checkbox change ให้คำนวณใหม่
+    document.querySelectorAll(".item input[type='checkbox']").forEach(cb => {
+      cb.addEventListener("change", calculateTotal);
     });
 
-  function randomUniqueCards(n) {
-    const shuffled = [...cards].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, n);
-  }
-
-  function escapeHtml(s) {
-    return (s || "").replace(/[&<>"']/g, m => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"
-    }[m]));
-  }
-
-  function startReading() {
-    const customer = document.getElementById("customerName").value.trim();
-    const typeKey = document.getElementById("readingType").value;
-
-    if (!customer) {
-      alert("กรุณากรอกชื่อลูกค้า");
-      return;
-    }
-    if (!READING_CONFIG[typeKey]) {
-      alert("ประเภทการดูไม่ถูกต้อง");
-      return;
-    }
-    if (cards.length === 0) {
-      alert("ยังโหลดข้อมูลไพ่ไม่สำเร็จ");
-      return;
-    }
-
-    const cfg = READING_CONFIG[typeKey];
-
-    // แสดง loading
-    const loadingBox = document.getElementById("loadingBox");
-    const resultBox = document.getElementById("resultBox");
-    resultBox.style.display = "none";
-    loadingBox.style.display = "block";
-
-    // จำลองการสุ่มไพ่ (ให้มี delay เล็กน้อยเพื่อ UX)
-    setTimeout(() => {
-      const picked = randomUniqueCards(cfg.n);
-
-      // สร้าง HTML แสดงผล
-      let cardsHtml = '';
-      picked.forEach((c, i) => {
-        const slot = cfg.slots[i] || `ใบที่ ${i+1}`;
-        cardsHtml += `
-          <div class="card">
-            <div class="badge">${escapeHtml(slot)}</div>
-            <div class="card-title">${escapeHtml(c.name)}</div>
-            <div class="card-meaning">${escapeHtml(c.meaning || "-")}</div>
-          </div>
-        `;
+    // ✅ bind payment change
+    document.querySelectorAll("input[name='pay']").forEach(r => {
+      r.addEventListener("change", () => {
+        const isPP = document.querySelector("input[name='pay']:checked")?.value === "โอน (PromptPay)";
+        toggleQR(isPP);
+        calculateTotal();
       });
+    });
+  });
 
-      const html = `
-        <div class="result-header">
-          <div class="customer-name">👤 ${escapeHtml(customer)}</div>
-          <div class="reading-info">ประเภท: ${escapeHtml(cfg.label)} • จำนวนไพ่: ${cfg.n} ใบ</div>
-        </div>
-        <div class="cards-container">
-          ${cardsHtml}
-        </div>
-      `;
-
-      loadingBox.style.display = "none";
-      resultBox.innerHTML = html;
-      resultBox.style.display = "block";
-
-      // Scroll to result
-      setTimeout(() => {
-        resultBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }, 100);
-
-      // บันทึกลง Log
-      const payload = {
-        name: customer,
-        type: cfg.label,
-        cards: picked.map(x => x.name).join(", ")
-      };
-
-      fetch(SAVE_API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      }).catch(err => {
-        console.error("Save error:", err);
-      });
-    }, 800);
+  function validateShopTime() {
+    const timeInput = document.getElementById("timeInput");
+    if (!timeInput.checkValidity()) {
+      alert(`กรุณาเลือกเวลาระหว่างร้านเปิด (${timeInput.min} - ${timeInput.max})`);
+      return false;
+    }
+    return true;
   }
 
-  // เพิ่ม Enter key support
-  document.getElementById("customerName").addEventListener("keypress", function(e) {
-    if (e.key === "Enter") {
-      startReading();
+  function handlePrint() {
+    if (!validateShopTime()) return;
+
+    const isPromptPay = document.querySelector("input[name='pay']:checked")?.value === "โอน (PromptPay)";
+    const qrContainer = document.getElementById("qrContainer");
+    if (isPromptPay) qrContainer.classList.add("show-print");
+    else qrContainer.classList.remove("show-print");
+
+    window.print();
+  }
+
+  window.onbeforeprint = function () {
+    const dateVal = document.getElementById("dateInput").value;
+    const timeVal = document.getElementById("timeInput").value;
+
+    if (dateVal) {
+      const d = new Date(dateVal);
+      const formattedDate =
+        `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear() + 543}`;
+      document.getElementById("dateText").innerText = formattedDate;
+    }
+    document.getElementById("timeText").innerText = timeVal ? " " + timeVal : "";
+  };
+
+  // ✅ ทุกครั้งที่พิมพ์ราคา/ส่วนลด -> ติ๊ก checkbox ให้เอง + คำนวณ
+  document.addEventListener("input", (e) => {
+    if (e.target.classList.contains("price-input") || e.target.id === "discount") {
+      const itemRow = e.target.closest(".item");
+      if (itemRow) {
+        const checkbox = itemRow.querySelector("input[type='checkbox']");
+        const val = parseFloat(e.target.value) || 0;
+        if (checkbox) checkbox.checked = val > 0;
+      }
+      calculateTotal();
     }
   });
+
+  function calculateTotal() {
+    let total = 0;
+
+    document.querySelectorAll(".item").forEach((el) => {
+      const checkbox = el.querySelector("input[type='checkbox']");
+      const priceEl = el.querySelector(".price-input");
+      const price = parseFloat(priceEl?.value) || 0;
+      if (checkbox && checkbox.checked) total += price;
+    });
+
+    const disc = parseFloat(document.getElementById("discount").value) || 0;
+    const grandTotal = Math.max(0, total - disc);
+
+    document.getElementById("grandTotal").innerText = grandTotal.toLocaleString();
+
+    const isPromptPay = document.querySelector("input[name='pay']:checked")?.value === "โอน (PromptPay)";
+    if (isPromptPay) generatePromptPayQR(grandTotal);
+  }
+
+  function toggleQR(show) {
+    const qrContainer = document.getElementById("qrContainer");
+    qrContainer.style.display = show ? "block" : "none";
+    if (show) calculateTotal();
+  }
+
+  function generatePromptPayQR(amount) {
+    const img = document.getElementById("promptPayQr");
+    if (amount <= 0) {
+      img.src = "";
+      return;
+    }
+    img.src = `https://promptpay.io/${SHOP_PROMPTPAY_ID}/${amount}.png`;
+  }
+
+  async function saveToSheets() {
+    if (!validateShopTime()) return;
+
+    const name = document.getElementById("name").value.trim();
+    const stylist = document.getElementById("stylist").value;
+
+    if (!name) return alert("กรุณาระบุชื่อลูกค้า");
+    if (!stylist) return alert("กรุณาเลือกช่างผม");
+
+    const btn = document.getElementById("saveBtn");
+    btn.disabled = true;
+    btn.innerText = "SAVING...";
+
+    const dateParts = document.getElementById("dateInput").value.split("-");
+    const formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+
+    const selectedServices = Array.from(document.querySelectorAll(".item input[type='checkbox']:checked"))
+      .map((checkbox) => {
+        if (checkbox.id === "otherCheck") {
+          const otherVal = document.getElementById("otherDetail").value.trim();
+          return otherVal !== "" ? otherVal : "อื่นๆ";
+        }
+        return checkbox.value;
+      })
+      .join(", ");
+
+    const payload = {
+      date: formattedDate,
+      time: document.getElementById("timeInput").value,
+      name: name,
+      phone: document.getElementById("phone").value,
+      stylist: stylist,
+      length: document.querySelector("input[name='len']:checked")?.value || "-",
+      services: selectedServices,
+      payment: document.querySelector("input[name='pay']:checked")?.value || "เงินสด",
+      discount: document.getElementById("discount").value || 0,
+      total: document.getElementById("grandTotal").innerText.replace(/,/g, ""),
+      note: document.getElementById("note").value
+    };
+
+    try {
+      await fetch(SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) });
+      alert("บันทึกสำเร็จ!");
+    } catch (e) {
+      alert("บันทึกไม่สำเร็จ");
+    } finally {
+      btn.disabled = false;
+      btn.innerText = "SAVE TO GOOGLE";
+    }
+  }
 </script>
 
 </body>
